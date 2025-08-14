@@ -5,9 +5,9 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 
 # ===== إعدادات البوت =====
 TOKEN = "6217434623:AAGZqBjmVz-VZ6W0y0MXeN0pAtXyRjSZTNk"
-ADMIN_ID = 5581457665  # معرف المدير
+ADMIN_ID = 5581457665
 WEBHOOK_PATH = f"/webhook/{TOKEN}"
-WEBHOOK_URL = f"https://teestrbot.onrender.com{WEBHOOK_PATH}"
+WEBHOOK_URL = f"https://boteleinsta.onrender.com{WEBHOOK_PATH}"
 
 # ===== إنشاء تطبيق FastAPI =====
 app = FastAPI()
@@ -22,32 +22,26 @@ telegram_accounts = ["tg_account1", "tg_account2"]
 # ===== لوحة الأزرار الرئيسية للمالك =====
 def main_menu():
     buttons = []
-    # عرض حسابات إنستغرام
     for acc in instagram_accounts:
         buttons.append([InlineKeyboardButton(f"📸 {acc}", callback_data=f"insta_{acc}")])
-    # عرض حسابات تيليجرام
     for acc in telegram_accounts:
         buttons.append([InlineKeyboardButton(f"💬 {acc}", callback_data=f"tg_{acc}")])
-    # أزرار إضافية
     buttons.append([InlineKeyboardButton("⚙️ الإعدادات", callback_data="settings")])
     buttons.append([InlineKeyboardButton("ℹ️ المساعدة", callback_data="help")])
     return InlineKeyboardMarkup(buttons)
 
-# ===== رسالة البوت عند توقفه للمستخدمين العاديين =====
+# ===== رسالة توقف البوت للمستخدمين العاديين =====
 def stopped_message():
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("👤 تواصل مع المالك", url="https://t.me/E2E12")]
     ])
-    return "⛔ البوت متوقف حالياً", keyboard
+    return "⛔ 💰البوت متوقف حالياً", keyboard
 
 # ===== أمر /start =====
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     if user_id == ADMIN_ID:
-        await update.message.reply_text(
-            "👋 أهلاً بك يا Batman! اختر الحساب لإدارته:",
-            reply_markup=main_menu()
-        )
+        await update.message.reply_text("👋 أهلاً بك يا Batman!😂🦾 اختر لأنقاذ المدينه:", reply_markup=main_menu())
     else:
         text, keyboard = stopped_message()
         await update.message.reply_text(text, reply_markup=keyboard)
@@ -63,7 +57,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(text, reply_markup=keyboard)
         return
 
-    # التعامل مع أزرار المالك
     data = query.data
     if data.startswith("insta_"):
         account = data.replace("insta_", "")
@@ -72,7 +65,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         account = data.replace("tg_", "")
         await query.edit_message_text(f"💬 إدارة حساب تيليجرام: {account}\n- يمكنك تغيير المعلومات أو التحكم بالتفاعل.", reply_markup=main_menu())
     elif data == "settings":
-        await query.edit_message_text("⚙️ إعدادات البوت:\n- اللغة: العربية\n- الإشعارات: مفعلة", reply_markup=main_menu())
+        await query.edit_message_text("⚙️ إعدادات باتماان:\n- اللغة: العربية\n- الإشعارات: مفعلة", reply_markup=main_menu())
     elif data == "help":
         await query.edit_message_text("ℹ️ المساعدة:\n- استخدم الأزرار للتحكم في حساباتك بسهولة.", reply_markup=main_menu())
 
